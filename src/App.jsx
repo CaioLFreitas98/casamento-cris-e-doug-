@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Heart, Calendar, MapPin, Clock, Gift, CheckCircle2, ChevronDown, Camera, Music, ImagePlus, ChevronLeft, ChevronRight, Sparkles, AlertCircle, MessageSquare, Bed } from 'lucide-react';
+import { Heart, Calendar, MapPin, Clock, Gift, CheckCircle2, ChevronDown, Camera, Music, ImagePlus, ChevronLeft, ChevronRight, Sparkles, AlertCircle, MessageSquare, Bed, Quote, Globe } from 'lucide-react';
 
 // Data do casamento: 09 de Janeiro de 2027 às 17:00
 const weddingDate = new Date('2027-01-09T17:00:00');
@@ -29,11 +29,11 @@ export default function App() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Utilizando os ficheiros de imagem que carregou diretamente no chat!
+  // Utilizando os ficheiros de imagem que carregou diretamente no chat
   const fotosCasal = [
-    'image_b486b8.jpg',
-    'image_b489a0.jpg',
-    'image_b489e2.jpg'
+    'image_b486b8.jpeg',
+    'image_b489a0.jpeg',
+    'image_b489e2.jpeg'
   ];
 
   const nextSlide = () => {
@@ -103,7 +103,7 @@ export default function App() {
                 { name: 'A Nossa História', href: '#historia' },
                 { name: 'Galeria', href: '#galeria' },
                 { name: 'O Casamento', href: '#detalhes' },
-                { name: 'Traje', href: '#dresscode' },
+                { name: 'Manual', href: '#manual' },
                 { name: 'Hotéis', href: '#hoteis' },
                 { name: 'Fotos', href: '#fotos' },
                 { name: 'Recados', href: '#recados' },
@@ -137,7 +137,7 @@ export default function App() {
               <a href="#historia" onClick={() => setIsMenuOpen(false)} className="py-2 hover:text-[#8A3343] transition-colors">A Nossa História</a>
               <a href="#galeria" onClick={() => setIsMenuOpen(false)} className="py-2 hover:text-[#8A3343] transition-colors">Galeria</a>
               <a href="#detalhes" onClick={() => setIsMenuOpen(false)} className="py-2 hover:text-[#8A3343] transition-colors">O Casamento</a>
-              <a href="#dresscode" onClick={() => setIsMenuOpen(false)} className="py-2 hover:text-[#8A3343] transition-colors">Traje</a>
+              <a href="#manual" onClick={() => setIsMenuOpen(false)} className="py-2 hover:text-[#8A3343] transition-colors">Manual do Convidado</a>
               <a href="#hoteis" onClick={() => setIsMenuOpen(false)} className="py-2 hover:text-[#8A3343] transition-colors">Hotéis</a>
               <a href="#fotos" onClick={() => setIsMenuOpen(false)} className="py-2 hover:text-[#8A3343] transition-colors">Fotos</a>
               <a href="#playlist" onClick={() => setIsMenuOpen(false)} className="py-2 hover:text-[#8A3343] transition-colors">Playlist</a>
@@ -223,11 +223,11 @@ export default function App() {
 
           <div className="relative max-w-4xl mx-auto group">
             {/* Imagem do Carrossel */}
-            <div className="overflow-hidden rounded-2xl shadow-lg aspect-[4/3] md:aspect-[16/10] relative bg-[#fdfbfb] border border-[#F0E8E9]">
+            <div className="overflow-hidden rounded-2xl shadow-lg aspect-[4/3] md:aspect-[16/10] relative bg-[#f9f8f8] border border-[#F0E8E9] flex items-center justify-center">
               <img
                 src={fotosCasal[currentSlide]}
                 alt={`Momento especial ${currentSlide + 1}`}
-                className="w-full h-full object-cover object-top transition-opacity duration-500"
+                className="w-full h-full object-contain transition-opacity duration-500"
               />
             </div>
 
@@ -328,97 +328,185 @@ export default function App() {
         </div>
       </section>
 
-      {/* Secção Dress Code */}
-      <section id="dresscode" className="py-24 px-4 bg-white border-t border-[#F0E8E9]">
-        <div className="max-w-4xl mx-auto text-center">
+      {/* Secção Manual do Convidado */}
+      <section id="manual" className="py-24 px-4 bg-white border-t border-[#F0E8E9]">
+        <div className="max-w-6xl mx-auto text-center">
           <div className="w-20 h-20 bg-[#fdfbfb] rounded-full flex items-center justify-center text-[#8A3343] mx-auto mb-8 shadow-sm border border-[#F0E8E9]">
             <Sparkles size={32} strokeWidth={1.5} />
           </div>
-          <p className="text-[#8A3343] uppercase tracking-[0.2em] text-sm mb-3 font-medium">Capriche no visual</p>
-          <h2 className="text-4xl md:text-5xl font-serif text-[#301B1E] mb-6 italic">Dress Code</h2>
-          <p className="text-[#4A4243] leading-relaxed text-lg mb-12 max-w-2xl mx-auto">
-            Para o nosso grande dia, sugerimos o traje <strong>Esporte Fino</strong>. Queremos que se sintam lindos e muito confortáveis para celebrar e dançar connosco até ao fim!
+          <p className="text-[#8A3343] uppercase tracking-[0.2em] text-sm mb-3 font-medium">Guia para o grande dia</p>
+          <h2 className="text-4xl md:text-5xl font-serif text-[#301B1E] mb-6 italic">Manual do Convidado</h2>
+          <p className="text-[#4A4243] leading-relaxed text-lg mb-16 max-w-2xl mx-auto">
+            Preparámos estas dicas com muito carinho para que a nossa celebração seja fluida, harmoniosa e inesquecível para todos.
           </p>
 
-          <div className="grid md:grid-cols-2 gap-8 max-w-3xl mx-auto mb-12">
-            <div className="bg-[#fdfbfb] p-8 rounded-2xl border border-[#F0E8E9] shadow-sm transform transition-transform hover:-translate-y-1">
-              <h3 className="text-2xl font-serif text-[#8A3343] mb-4">Para os Homens</h3>
-              <p className="text-[#4A4243] text-lg">
-                Calça social ou de sarja, camisa social e blazer. A gravata é totalmente opcional, fiquem à vontade!
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {/* Regra 1: Pontualidade */}
+            <div className="bg-[#fdfbfb] p-10 rounded-2xl border border-[#F0E8E9] shadow-sm transform transition-transform hover:-translate-y-1 flex flex-col items-center text-center">
+              <Quote size={32} className="text-[#CBA1A6] mb-6" />
+              <h3 className="text-xl font-serif text-[#301B1E] mb-4 uppercase tracking-widest">Seja Pontual</h3>
+              <p className="text-[#4A4243] leading-relaxed">
+                A cerimônia é um momento único e delicado. Chegar a tempo nos permitirá compartilhar essa alegria sem interrupções. Contamos com sua pontualidade!
               </p>
             </div>
-            <div className="bg-[#fdfbfb] p-8 rounded-2xl border border-[#F0E8E9] shadow-sm transform transition-transform hover:-translate-y-1">
-              <h3 className="text-2xl font-serif text-[#8A3343] mb-4">Para as Mulheres</h3>
-              <p className="text-[#4A4243] text-lg">
-                Vestidos midi, longos fluidos ou macacões elegantes. Apostem na sofisticação com tecidos leves.
-              </p>
-            </div>
-          </div>
 
-          <div className="bg-[#FFF5F5] p-8 md:p-10 rounded-[2rem] border border-[#FADBD8] max-w-3xl mx-auto text-left flex flex-col md:flex-row gap-6 items-start shadow-sm">
-             <div className="text-[#8A3343] bg-white p-3 rounded-full shadow-sm shrink-0">
-               <AlertCircle size={32} strokeWidth={1.5} />
-             </div>
-             <div>
-                <h4 className="text-xl font-serif text-[#8A3343] mb-3">Atenção às Cores!</h4>
-                <p className="text-[#4A4243] mb-4 text-lg">
-                  Pedimos com carinho que <strong>evitem as cores Verde e Marsala</strong>, pois serão as cores exclusivas das nossas queridas madrinhas e da decoração.
-                </p>
-                <div className="bg-white p-5 rounded-xl border border-[#FADBD8] inline-block w-full">
-                  <p className="text-[#4A4243] italic text-lg leading-relaxed">
-                    Ah, e o <strong>Branco (e os tons off-white)</strong> são exclusividade da noiva! Ela já avisou que deixou a madrinha armada com uma taça de vinho tinto pronta para "acidentes", caso alguém apareça de branco (brincadeirinha... ou será que não? 🍷😅).
-                  </p>
-                </div>
-             </div>
+            {/* Regra 2: Cerimónia */}
+            <div className="bg-[#fdfbfb] p-10 rounded-2xl border border-[#F0E8E9] shadow-sm transform transition-transform hover:-translate-y-1 flex flex-col items-center text-center">
+              <Quote size={32} className="text-[#CBA1A6] mb-6" />
+              <h3 className="text-xl font-serif text-[#301B1E] mb-4 uppercase tracking-widest">Participe da Cerimônia</h3>
+              <p className="text-[#4A4243] leading-relaxed">
+                A cerimônia é um dos momentos mais significativos para os noivos, e sua presença faz toda a diferença. Pedimos que evitem sair e que participem da celebração!
+              </p>
+            </div>
+
+            {/* Regra 3: Vestimenta */}
+            <div className="bg-[#fdfbfb] p-10 rounded-2xl border border-[#F0E8E9] shadow-sm transform transition-transform hover:-translate-y-1 flex flex-col items-center text-center">
+              <Quote size={32} className="text-[#CBA1A6] mb-6" />
+              <h3 className="text-xl font-serif text-[#301B1E] mb-4 uppercase tracking-widest">Código de Vestimenta</h3>
+              <p className="text-[#4A4243] leading-relaxed">
+                Sugerimos o estilo <strong>esporte fino</strong>, que é ideal para este dia especial. Homens podem optar por camisa e calça social (ou sarja), e mulheres por vestidos midi ou longos fluidos.
+              </p>
+            </div>
+
+            {/* Regra 4: Cores Proibidas */}
+            <div className="bg-[#FFF5F5] p-10 rounded-2xl border border-[#FADBD8] shadow-sm transform transition-transform hover:-translate-y-1 flex flex-col items-center text-center">
+              <Quote size={32} className="text-[#8A3343] mb-6" />
+              <h3 className="text-xl font-serif text-[#8A3343] mb-4 uppercase tracking-widest">Não use Branco!</h3>
+              <p className="text-[#4A4243] leading-relaxed">
+                Essa cor (e tons como off-white e bege claro) é reservada para a noiva. Pedimos também que <strong>evitem Verde e Marsala</strong>, que são as cores exclusivas das madrinhas. A madrinha já tem a taça de vinho pronta! 🍷😅
+              </p>
+            </div>
+
+            {/* Regra 5: Convidados */}
+            <div className="bg-[#fdfbfb] p-10 rounded-2xl border border-[#F0E8E9] shadow-sm transform transition-transform hover:-translate-y-1 flex flex-col items-center text-center">
+              <Quote size={32} className="text-[#CBA1A6] mb-6" />
+              <h3 className="text-xl font-serif text-[#301B1E] mb-4 uppercase tracking-widest">Convidado Não Convida</h3>
+              <p className="text-[#4A4243] leading-relaxed">
+                Sabemos que é natural querer compartilhar esse momento com pessoas queridas, mas pedimos que respeitem nossa lista de convidados. Cada nome foi pensado com muito carinho!
+              </p>
+            </div>
+
+            {/* Regra 6: RSVP */}
+            <div className="bg-[#fdfbfb] p-10 rounded-2xl border border-[#F0E8E9] shadow-sm transform transition-transform hover:-translate-y-1 flex flex-col items-center text-center">
+              <Quote size={32} className="text-[#CBA1A6] mb-6" />
+              <h3 className="text-xl font-serif text-[#301B1E] mb-4 uppercase tracking-widest">Confirme Presença</h3>
+              <p className="text-[#4A4243] leading-relaxed">
+                Sua presença é muito importante para nós! Por isso, pedimos que nos avise com antecedência se poderá comparecer para nos ajudar a organizar tudo da melhor forma.
+              </p>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Secção Hotéis */}
       <section id="hoteis" className="py-24 px-4 bg-[#fdfbfb] border-t border-[#F0E8E9]">
-        <div className="max-w-5xl mx-auto text-center">
+        <div className="max-w-6xl mx-auto text-center">
           <div className="w-20 h-20 bg-white rounded-full flex items-center justify-center text-[#8A3343] mx-auto mb-8 shadow-sm border border-[#F0E8E9]">
             <Bed size={32} strokeWidth={1.5} />
           </div>
           <p className="text-[#8A3343] uppercase tracking-[0.2em] text-sm mb-3 font-medium">Para quem vem de fora</p>
           <h2 className="text-4xl md:text-5xl font-serif text-[#301B1E] mb-6 italic">Onde Ficar</h2>
           <p className="text-[#4A4243] leading-relaxed text-lg mb-12 max-w-2xl mx-auto">
-            Se vêm de outra cidade para celebrar connosco, separamos algumas sugestões de hotéis muito confortáveis em Três Lagoas para que possam descansar antes e depois da festa.
+            Se vêm de outra cidade para celebrar connosco, separamos excelentes opções de hotéis em Três Lagoas para que possam descansar com todo o conforto.
           </p>
 
-          <div className="grid md:grid-cols-3 gap-6 text-left">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 text-left">
             {/* Hotel 1 */}
             <div className="bg-white p-8 rounded-2xl border border-[#F0E8E9] shadow-sm flex flex-col h-full transform transition-transform hover:-translate-y-1">
               <h3 className="text-2xl font-serif text-[#8A3343] mb-3">Taj Hotel</h3>
               <p className="text-[#4A4243] text-base mb-6 flex-grow">
-                Uma das opções mais sofisticadas da cidade, oferecendo excelente infraestrutura, conforto e pequeno-almoço maravilhoso.
+                Uma das opções mais sofisticadas da cidade, oferecendo excelente infraestrutura, muito conforto e um pequeno-almoço maravilhoso.
               </p>
-              <a href="https://www.google.com/maps/search/Taj+Hotel+Tres+Lagoas" target="_blank" rel="noopener noreferrer" className="text-[#8A3343] font-medium uppercase tracking-wider text-sm hover:text-[#CBA1A6] transition-colors flex items-center gap-2">
-                <MapPin size={16} /> Ver no Mapa
-              </a>
+              <div className="flex flex-wrap gap-4 mt-auto">
+                <a href="https://www.google.com/maps/search/Taj+Hotel+Tres+Lagoas" target="_blank" rel="noopener noreferrer" className="text-[#8A3343] font-medium uppercase tracking-wider text-sm hover:text-[#CBA1A6] transition-colors flex items-center gap-2">
+                  <MapPin size={16} /> Mapa
+                </a>
+                <a href="https://www.google.com/search?q=Taj+Hotel+Tres+Lagoas+site" target="_blank" rel="noopener noreferrer" className="text-[#8A3343] font-medium uppercase tracking-wider text-sm hover:text-[#CBA1A6] transition-colors flex items-center gap-2">
+                  <Globe size={16} /> Site
+                </a>
+              </div>
             </div>
 
             {/* Hotel 2 */}
             <div className="bg-white p-8 rounded-2xl border border-[#F0E8E9] shadow-sm flex flex-col h-full transform transition-transform hover:-translate-y-1">
-              <h3 className="text-2xl font-serif text-[#8A3343] mb-3">Druds Express Hotel</h3>
+              <h3 className="text-2xl font-serif text-[#8A3343] mb-3">Druds Express</h3>
               <p className="text-[#4A4243] text-base mb-6 flex-grow">
-                Uma opção muito prática, moderna e com excelente custo-benefício. Ótima localização para quem procura conveniência.
+                Uma opção muito prática, moderna e com excelente custo-benefício. Ótima localização para quem procura conveniência e agilidade.
               </p>
-              <a href="https://www.google.com/maps/search/Druds+Express+Hotel+Tres+Lagoas" target="_blank" rel="noopener noreferrer" className="text-[#8A3343] font-medium uppercase tracking-wider text-sm hover:text-[#CBA1A6] transition-colors flex items-center gap-2">
-                <MapPin size={16} /> Ver no Mapa
-              </a>
+              <div className="flex flex-wrap gap-4 mt-auto">
+                <a href="https://www.google.com/maps/search/Druds+Express+Hotel+Tres+Lagoas" target="_blank" rel="noopener noreferrer" className="text-[#8A3343] font-medium uppercase tracking-wider text-sm hover:text-[#CBA1A6] transition-colors flex items-center gap-2">
+                  <MapPin size={16} /> Mapa
+                </a>
+                <a href="https://www.drudshotel.com.br/" target="_blank" rel="noopener noreferrer" className="text-[#8A3343] font-medium uppercase tracking-wider text-sm hover:text-[#CBA1A6] transition-colors flex items-center gap-2">
+                  <Globe size={16} /> Site
+                </a>
+              </div>
             </div>
 
             {/* Hotel 3 */}
             <div className="bg-white p-8 rounded-2xl border border-[#F0E8E9] shadow-sm flex flex-col h-full transform transition-transform hover:-translate-y-1">
               <h3 className="text-2xl font-serif text-[#8A3343] mb-3">Vila Romana Park</h3>
               <p className="text-[#4A4243] text-base mb-6 flex-grow">
-                Perfeito para quem procura um ambiente mais tranquilo, com bastante área verde e piscina para relaxar.
+                Perfeito para quem procura um ambiente mais tranquilo, com bastante área verde e piscina para relaxar após a viagem.
               </p>
-              <a href="https://www.google.com/maps/search/Vila+Romana+Park+Hotel+Tres+Lagoas" target="_blank" rel="noopener noreferrer" className="text-[#8A3343] font-medium uppercase tracking-wider text-sm hover:text-[#CBA1A6] transition-colors flex items-center gap-2">
-                <MapPin size={16} /> Ver no Mapa
-              </a>
+              <div className="flex flex-wrap gap-4 mt-auto">
+                <a href="https://www.google.com/maps/search/Vila+Romana+Park+Hotel+Tres+Lagoas" target="_blank" rel="noopener noreferrer" className="text-[#8A3343] font-medium uppercase tracking-wider text-sm hover:text-[#CBA1A6] transition-colors flex items-center gap-2">
+                  <MapPin size={16} /> Mapa
+                </a>
+                <a href="https://www.vilaromanaparkhotel.com.br/" target="_blank" rel="noopener noreferrer" className="text-[#8A3343] font-medium uppercase tracking-wider text-sm hover:text-[#CBA1A6] transition-colors flex items-center gap-2">
+                  <Globe size={16} /> Site
+                </a>
+              </div>
             </div>
+
+            {/* Hotel 4 */}
+            <div className="bg-white p-8 rounded-2xl border border-[#F0E8E9] shadow-sm flex flex-col h-full transform transition-transform hover:-translate-y-1">
+              <h3 className="text-2xl font-serif text-[#8A3343] mb-3">Hotel OT</h3>
+              <p className="text-[#4A4243] text-base mb-6 flex-grow">
+                Um clássico da cidade! Fica em frente à bela Lagoa Maior, oferecendo conforto com uma vista privilegiada e excelente área de lazer.
+              </p>
+              <div className="flex flex-wrap gap-4 mt-auto">
+                <a href="https://www.google.com/maps/search/Hotel+OT+Tres+Lagoas" target="_blank" rel="noopener noreferrer" className="text-[#8A3343] font-medium uppercase tracking-wider text-sm hover:text-[#CBA1A6] transition-colors flex items-center gap-2">
+                  <MapPin size={16} /> Mapa
+                </a>
+                <a href="https://www.hotelot.com.br/" target="_blank" rel="noopener noreferrer" className="text-[#8A3343] font-medium uppercase tracking-wider text-sm hover:text-[#CBA1A6] transition-colors flex items-center gap-2">
+                  <Globe size={16} /> Site
+                </a>
+              </div>
+            </div>
+
+            {/* Hotel 5 */}
+            <div className="bg-white p-8 rounded-2xl border border-[#F0E8E9] shadow-sm flex flex-col h-full transform transition-transform hover:-translate-y-1">
+              <h3 className="text-2xl font-serif text-[#8A3343] mb-3">Mura Hotel</h3>
+              <p className="text-[#4A4243] text-base mb-6 flex-grow">
+                Uma opção moderna e elegante, com quartos novos, ótimo atendimento e uma localização central que facilita muito o acesso a tudo.
+              </p>
+              <div className="flex flex-wrap gap-4 mt-auto">
+                <a href="https://www.google.com/maps/search/Mura+Hotel+Tres+Lagoas" target="_blank" rel="noopener noreferrer" className="text-[#8A3343] font-medium uppercase tracking-wider text-sm hover:text-[#CBA1A6] transition-colors flex items-center gap-2">
+                  <MapPin size={16} /> Mapa
+                </a>
+                <a href="https://www.murahotel.com.br/" target="_blank" rel="noopener noreferrer" className="text-[#8A3343] font-medium uppercase tracking-wider text-sm hover:text-[#CBA1A6] transition-colors flex items-center gap-2">
+                  <Globe size={16} /> Site
+                </a>
+              </div>
+            </div>
+
+            {/* Hotel 6 */}
+            <div className="bg-white p-8 rounded-2xl border border-[#F0E8E9] shadow-sm flex flex-col h-full transform transition-transform hover:-translate-y-1">
+              <h3 className="text-2xl font-serif text-[#8A3343] mb-3">Tokyos Hotel</h3>
+              <p className="text-[#4A4243] text-base mb-6 flex-grow">
+                Uma estadia tradicional e muito acolhedora. Conta com um serviço atencioso e é perfeito para as famílias que procuram tranquilidade.
+              </p>
+              <div className="flex flex-wrap gap-4 mt-auto">
+                <a href="https://www.google.com/maps/search/Tokyos+Hotel+Tres+Lagoas" target="_blank" rel="noopener noreferrer" className="text-[#8A3343] font-medium uppercase tracking-wider text-sm hover:text-[#CBA1A6] transition-colors flex items-center gap-2">
+                  <MapPin size={16} /> Mapa
+                </a>
+                <a href="https://www.tokyoshotel.com.br/" target="_blank" rel="noopener noreferrer" className="text-[#8A3343] font-medium uppercase tracking-wider text-sm hover:text-[#CBA1A6] transition-colors flex items-center gap-2">
+                  <Globe size={16} /> Site
+                </a>
+              </div>
+            </div>
+
           </div>
         </div>
       </section>
