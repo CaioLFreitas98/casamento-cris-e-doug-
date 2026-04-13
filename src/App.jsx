@@ -159,7 +159,6 @@ export default function App() {
     loadPresentes();
   }, [loadRecados, loadPresentes]);
 
-  // Carousel
   const nextSlide = () => setCurrentSlide((p) => (p === fotosCasal.length - 1 ? 0 : p + 1));
   const prevSlide = () => setCurrentSlide((p) => (p === 0 ? fotosCasal.length - 1 : p - 1));
 
