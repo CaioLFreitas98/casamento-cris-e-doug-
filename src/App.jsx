@@ -442,7 +442,7 @@ export default function App() {
           <div className="rounded-2xl overflow-hidden shadow-lg border border-[#F0E8E9] max-w-2xl mx-auto mb-8 bg-[#f5f3f3]">
             <iframe style={{ borderRadius: "16px" }} src="https://open.spotify.com/embed/playlist/6EE7EDNFBIQ83oVaNnm77R?utm_source=generator&theme=0" width="100%" height="352" frameBorder="0" allowFullScreen allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" title="Spotify Playlist" />
           </div>
-          <a href="https://open.spotify.com/playlist/6EE7EDNFBIQ83oVaNnm77R?si=5704811e91724e9b" target="_blank" rel="noopener noreferrer" className="inline-block bg-[#8A3343] text-white px-10 py-4 rounded-full hover:bg-[#6B2533] transition-colors uppercase tracking-[0.1em] text-sm font-semibold shadow-md">
+          <a href="https://open.spotify.com/playlist/6EE7EDNFBIQ83oVaNnm77R?si=ebkAZGbERIaSp5CTd_yJjA&pt=e9f1b6c3ff5d341c8b7e8d94da06d6d1&pi=gTijJ5qSQYWn6" target="_blank" rel="noopener noreferrer" className="inline-block bg-[#8A3343] text-white px-10 py-4 rounded-full hover:bg-[#6B2533] transition-colors uppercase tracking-[0.1em] text-sm font-semibold shadow-md">
             Adicionar Músicas no Spotify
           </a>
         </div>
