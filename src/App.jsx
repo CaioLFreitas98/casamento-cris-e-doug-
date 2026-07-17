@@ -48,6 +48,25 @@ function calcTimeLeft() {
   };
 }
 
+const topMessages = [
+  {
+    title: "Divirta-se muito!",
+    text: "Esse é um dia de celebração, queremos ver todos felizes! Evitem brigas, confusões e comentários maldosos. Bebam com consciência e, se beberem, não dirijam.",
+  },
+  {
+    title: "Aguarde o momento certo para os doces",
+    text: "A mesa de doces será liberada no momento oportuno, e queremos que todos possam aproveitar ao máximo!",
+  },
+  {
+    title: "Deixe a decoração no local",
+    text: "A decoração foi pensada para criar um ambiente mágico. Pedimos que evitem levar qualquer parte dela como lembrança, a menos que algo seja oferecido pelos noivos.",
+  },
+  {
+    title: "Cuidado com as fotos",
+    text: "Fique à vontade para registrar os momentos especiais, mas pedimos que evitem interferir no trabalho dos fotógrafos profissionais. Assim, todos poderão aproveitar as memórias dessa celebração.",
+  },
+];
+
 // ── Modal Reserva ────────────────────────────────────────────────
 function ModalReserva({ presente, onClose, onConfirm }) {
   const [nome, setNome] = useState("");
@@ -68,7 +87,7 @@ function ModalReserva({ presente, onClose, onConfirm }) {
           <div className="w-16 h-16 bg-[#fdfbfb] rounded-full flex items-center justify-center text-[#8A3343] mx-auto mb-4 border border-[#F0E8E9]">
             <Gift size={28} strokeWidth={1.5} />
           </div>
-          <h3 className="text-2xl font-serif text-[#301B1E] italic mb-1">Reservar Presente</h3>
+          <h3 className="text-2xl font-serif text-[#301B1E] italic mb-1">Reservar presente</h3>
           <p className="text-[#4A4243]">Você está reservando: <strong>{presente.nome}</strong></p>
         </div>
         <div className="mb-6">
@@ -106,6 +125,7 @@ export default function App() {
   const [rsvpStatus, setRsvpStatus] = useState("idle");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [currentMessageSlide, setCurrentMessageSlide] = useState(0);
   const [isScrolled, setIsScrolled] = useState(false);
 
   // Recados
@@ -140,6 +160,13 @@ export default function App() {
     return () => clearInterval(t);
   }, []);
 
+  useEffect(() => {
+    const t = setInterval(() => {
+      setCurrentMessageSlide((p) => (p === topMessages.length - 1 ? 0 : p + 1));
+    }, 6000);
+    return () => clearInterval(t);
+  }, []);
+
   // Load recados
   const loadRecados = useCallback(async () => {
     const data = await sbGet("recados");
@@ -161,6 +188,8 @@ export default function App() {
 
   const nextSlide = () => setCurrentSlide((p) => (p === fotosCasal.length - 1 ? 0 : p + 1));
   const prevSlide = () => setCurrentSlide((p) => (p === 0 ? fotosCasal.length - 1 : p - 1));
+  const nextMessageSlide = () => setCurrentMessageSlide((p) => (p === topMessages.length - 1 ? 0 : p + 1));
+  const prevMessageSlide = () => setCurrentMessageSlide((p) => (p === 0 ? topMessages.length - 1 : p - 1));
 
   // RSVP submit
   const handleRsvpSubmit = async (e) => {
@@ -195,7 +224,7 @@ export default function App() {
   };
 
   const navLinks = [
-    { name: "A Nossa História", href: "#historia" },
+    { name: "A nossa história", href: "#historia" },
     { name: "Galeria", href: "#galeria" },
     { name: "O Casamento", href: "#detalhes" },
     { name: "Manual", href: "#manual" },
@@ -227,7 +256,7 @@ export default function App() {
                 <a key={l.name} href={l.href} className={`relative after:content-[''] after:absolute after:-bottom-1 after:left-0 after:w-0 after:h-[1px] after:transition-all after:duration-300 hover:after:w-full ${isScrolled ? "hover:text-[#8A3343] after:bg-[#8A3343]" : "hover:text-white/80 after:bg-white"}`}>{l.name}</a>
               ))}
               <a href="#rsvp" className={`px-5 py-2.5 rounded-full transition-all duration-300 transform hover:scale-105 ${isScrolled ? "bg-[#8A3343] text-white hover:bg-[#6B2533] shadow-md" : "bg-white/20 text-white backdrop-blur-sm border border-white/50 hover:bg-white hover:text-[#8A3343]"}`}>
-                Confirmar Presença
+                Confirmar presença
               </a>
             </div>
             <button className={`lg:hidden p-2 relative z-50 transition-colors duration-500 ${isScrolled || isMenuOpen ? "text-[#4A4243]" : "text-white drop-shadow-md"}`} onClick={() => setIsMenuOpen(!isMenuOpen)}>
@@ -260,7 +289,7 @@ export default function App() {
         <div className="relative z-10 text-center text-white px-4 flex flex-col items-center mt-16">
           <p className="text-sm md:text-base uppercase tracking-[0.3em] mb-6 font-light drop-shadow-md">Nós vamos casar!</p>
           <h1 className="text-6xl md:text-9xl font-serif mb-4 drop-shadow-lg italic">Cris & Doug</h1>
-          <p className="text-xl md:text-3xl font-light tracking-wide mb-12 drop-shadow-md">09 de Janeiro de 2027 &bull; Três Lagoas, MS</p>
+          <p className="text-xl md:text-3xl font-light tracking-wide mb-12 drop-shadow-md">09 de janeiro de 2027 &bull; Três Lagoas, MS</p>
           <div className="flex gap-3 md:gap-8 text-center backdrop-blur-md bg-white/15 p-6 md:p-8 rounded-2xl border border-white/30 shadow-2xl">
             {Object.keys(timeLeft).length ? (
               Object.entries(timeLeft).map(([k, v]) => (
@@ -279,19 +308,47 @@ export default function App() {
         </div>
       </section>
 
+      {/* Mensagens */}
+      <section className="py-16 md:py-20 px-4 bg-white border-t border-[#F0E8E9]">
+        <div className="max-w-4xl mx-auto text-center">
+          <div className="relative bg-[#fdfbfb] border border-[#F0E8E9] rounded-[2rem] shadow-sm px-6 py-12 md:px-16 md:py-16 overflow-hidden">
+            <Quote className="mx-auto text-[#8A3343] mb-8" size={42} strokeWidth={1.4} />
+            <div key={topMessages[currentMessageSlide].title} className="min-h-[190px] md:min-h-[150px] flex flex-col items-center justify-center">
+              <h2 className="text-3xl md:text-5xl font-serif text-[#301B1E] mb-6 uppercase tracking-[0.08em]">
+                {topMessages[currentMessageSlide].title}
+              </h2>
+              <p className="text-[#4A4243] text-lg md:text-2xl leading-relaxed max-w-3xl font-serif">
+                {topMessages[currentMessageSlide].text}
+              </p>
+            </div>
+            <button onClick={prevMessageSlide} aria-label="Mensagem anterior" className="absolute left-4 md:left-6 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-[#8A3343] p-3 rounded-full shadow-sm border border-[#F0E8E9] transition-all hover:scale-105">
+              <ChevronLeft size={22} />
+            </button>
+            <button onClick={nextMessageSlide} aria-label="Próxima mensagem" className="absolute right-4 md:right-6 top-1/2 -translate-y-1/2 bg-white/90 hover:bg-white text-[#8A3343] p-3 rounded-full shadow-sm border border-[#F0E8E9] transition-all hover:scale-105">
+              <ChevronRight size={22} />
+            </button>
+            <div className="flex justify-center gap-3 mt-8">
+              {topMessages.map((message, i) => (
+                <button key={message.title} onClick={() => setCurrentMessageSlide(i)} aria-label={`Mostrar mensagem ${i + 1}`} className={`w-3 h-3 rounded-full transition-colors duration-300 ${i === currentMessageSlide ? "bg-[#8A3343]" : "bg-[#F0E8E9] hover:bg-[#CBA1A6]"}`} />
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* História */}
       <section id="historia" className="py-24 px-4 bg-[#fdfbfb]">
         <div className="max-w-4xl mx-auto text-center">
           <Heart className="mx-auto text-[#8A3343] mb-6" size={36} strokeWidth={1.2} />
-          <h2 className="text-4xl md:text-5xl font-serif text-[#301B1E] mb-10 italic">A Nossa História</h2>
+          <h2 className="text-4xl md:text-5xl font-serif text-[#301B1E] mb-10 italic">A nossa história</h2>
           <div className="grid md:grid-cols-2 gap-12 text-left mt-16">
             <div className="bg-white p-8 rounded-2xl shadow-sm border border-[#F0E8E9]">
               <h3 className="text-2xl font-serif text-[#8A3343] mb-4">Como tudo começou</h3>
-              <p className="text-[#4A4243] leading-relaxed text-lg">O que parecia ser apenas mais um dia comum acabou por ser o início de algo extraordinário. Nossos caminhos cruzaram-se, as conversas fluíram como se nos conhecêssemos há anos e, desde esse momento, não nos largámos mais.</p>
+              <p className="text-[#4A4243] leading-relaxed text-lg">O que parecia ser apenas mais um dia comum acabou sendo o início de algo extraordinário. Nossos caminhos se cruzaram, as conversas fluíram como se nos conhecêssemos há anos e, desde esse momento, não nos desgrudamos mais.</p>
             </div>
             <div className="bg-white p-8 rounded-2xl shadow-sm border border-[#F0E8E9]">
-              <h3 className="text-2xl font-serif text-[#8A3343] mb-4">O Pedido</h3>
-              <p className="text-[#4A4243] leading-relaxed text-lg">Após meses de aventuras, viagens e de construirmos uma vida juntos, decidimos dar o próximo passo. Com muita emoção e a certeza de que somos o porto seguro um do outro, o "Sim" foi dito com o coração cheio de alegria.</p>
+              <h3 className="text-2xl font-serif text-[#8A3343] mb-4">O pedido</h3>
+              <p className="text-[#4A4243] leading-relaxed text-lg">Depois de meses de aventuras, viagens e construção de uma vida juntos, decidimos dar o próximo passo. Com muita emoção e a certeza de que somos o porto seguro um do outro, o "sim" foi dito com o coração cheio de alegria.</p>
             </div>
           </div>
         </div>
@@ -300,8 +357,8 @@ export default function App() {
       {/* Galeria */}
       <section id="galeria" className="py-24 px-4 bg-white border-t border-[#F0E8E9]">
         <div className="max-w-5xl mx-auto text-center">
-          <p className="text-[#8A3343] uppercase tracking-[0.2em] text-sm mb-3 font-medium">Nossos Momentos</p>
-          <h2 className="text-4xl md:text-5xl font-serif text-[#301B1E] mb-12 italic">Galeria de Fotos</h2>
+          <p className="text-[#8A3343] uppercase tracking-[0.2em] text-sm mb-3 font-medium">Nossos momentos</p>
+          <h2 className="text-4xl md:text-5xl font-serif text-[#301B1E] mb-12 italic">Galeria de fotos</h2>
           <div className="relative max-w-4xl mx-auto group">
             <div className="overflow-hidden rounded-2xl shadow-lg aspect-[4/3] md:aspect-[16/10] relative bg-[#f9f8f8] border border-[#F0E8E9] flex items-center justify-center">
               <img src={fotosCasal[currentSlide]} alt={`Foto ${currentSlide + 1}`} className="w-full h-full object-contain transition-opacity duration-500" />
@@ -321,8 +378,8 @@ export default function App() {
       <section id="detalhes" className="py-24 px-4 bg-[#fdfbfb] border-t border-[#F0E8E9] relative">
         <div className="max-w-5xl mx-auto relative z-10">
           <div className="text-center mb-16">
-            <p className="text-[#8A3343] uppercase tracking-[0.2em] text-sm mb-3 font-medium">Quando & Onde</p>
-            <h2 className="text-4xl md:text-5xl font-serif text-[#301B1E] mb-4 italic">O Casamento</h2>
+            <p className="text-[#8A3343] uppercase tracking-[0.2em] text-sm mb-3 font-medium">Quando e onde</p>
+            <h2 className="text-4xl md:text-5xl font-serif text-[#301B1E] mb-4 italic">O casamento</h2>
           </div>
           <div className="bg-white p-10 md:p-14 rounded-[2rem] shadow-lg border border-[#F0E8E9] flex flex-col items-center text-center max-w-4xl mx-auto relative overflow-hidden">
             <div className="absolute top-0 right-0 w-32 h-32 bg-[#F0E8E9] rounded-bl-full opacity-50"></div>
@@ -335,7 +392,7 @@ export default function App() {
             <div className="grid md:grid-cols-2 gap-10 md:gap-4 w-full max-w-2xl mb-12 divide-y md:divide-y-0 md:divide-x divide-[#F0E8E9] relative z-10">
               <div className="flex flex-col items-center pt-4 md:pt-0 md:pr-4">
                 <Calendar size={28} className="text-[#CBA1A6] mb-4" strokeWidth={1.5} />
-                <h4 className="font-serif text-2xl text-[#301B1E] mb-2">A Cerimônia</h4>
+                <h4 className="font-serif text-2xl text-[#301B1E] mb-2">A cerimônia</h4>
                 <div className="flex items-center text-[#4A4243] text-lg bg-[#fdfbfb] px-4 py-2 rounded-full shadow-sm border border-[#F0E8E9] mb-2"><Clock size={18} className="mr-2 text-[#CBA1A6]" />17:00</div>
                 <p className="text-[#8A3343] text-sm italic">Chegada a partir das 15:00</p>
               </div>
@@ -346,7 +403,7 @@ export default function App() {
               </div>
             </div>
             <a href="https://share.google/yU46iZuGmQB90Trw2" target="_blank" rel="noopener noreferrer" className="relative z-10 inline-flex items-center gap-3 bg-[#8A3343] text-white px-8 py-4 rounded-full hover:bg-[#6B2533] transition-all transform hover:scale-105 uppercase tracking-[0.1em] text-sm font-semibold shadow-md">
-              <MapPin size={18} /> Ver Rota no Mapa
+              <MapPin size={18} /> Ver rota no mapa
             </a>
           </div>
         </div>
@@ -360,15 +417,15 @@ export default function App() {
           </div>
           <p className="text-[#8A3343] uppercase tracking-[0.2em] text-sm mb-3 font-medium">Guia para o grande dia</p>
           <h2 className="text-4xl md:text-5xl font-serif text-[#301B1E] mb-6 italic">Manual do Convidado</h2>
-          <p className="text-[#4A4243] leading-relaxed text-lg mb-16 max-w-2xl mx-auto">Preparámos estas dicas com muito carinho para que a nossa celebração seja fluida, harmoniosa e inesquecível para todos.</p>
+          <p className="text-[#4A4243] leading-relaxed text-lg mb-16 max-w-2xl mx-auto">Preparamos estas dicas com muito carinho para que a nossa celebração seja fluida, harmoniosa e inesquecível para todos.</p>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
-              { title: "Seja Pontual", text: "A cerimônia é um momento único e delicado. Chegar a tempo nos permitirá compartilhar essa alegria sem interrupções. Contamos com sua pontualidade!" },
-              { title: "Participe da Cerimônia", text: "A cerimônia é um dos momentos mais significativos para os noivos, e sua presença faz toda a diferença. Pedimos que evitem sair e que participem da celebração!" },
-              { title: "Código de Vestimenta", text: "Sugerimos o estilo esporte fino. Homens podem optar por camisa e calça social, e mulheres por vestidos midi ou longos fluidos." },
-              { title: "Não use Branco!", text: "Essa cor (e tons como off-white e bege claro) é reservada para a noiva. Pedimos também que evitem Verde e Marsala, que são as cores exclusivas das madrinhas. 🍷😅", highlight: true },
-              { title: "Convidado Não Convida", text: "Sabemos que é natural querer compartilhar esse momento, mas pedimos que respeitem nossa lista de convidados. Cada nome foi pensado com muito carinho!" },
-              { title: "Confirme Presença", text: "Sua presença é muito importante para nós! Por isso, pedimos que nos avise com antecedência se poderá comparecer para nos ajudar a organizar tudo da melhor forma." },
+              { title: "Seja pontual", text: "A cerimônia é um momento único e delicado. Chegar a tempo nos permitirá compartilhar essa alegria sem interrupções. Contamos com sua pontualidade!" },
+              { title: "Participe da cerimônia", text: "A cerimônia é um dos momentos mais significativos para os noivos, e sua presença faz toda a diferença. Pedimos que evitem sair e que participem da celebração!" },
+              { title: "Código de vestimenta", text: "Sugerimos o estilo esporte fino. Homens podem optar por camisa e calça social, e mulheres por vestidos midi ou longos fluidos." },
+              { title: "Não use branco!", text: "Essa cor (e tons como off-white e bege claro) é reservada para a noiva. Pedimos também que evitem verde e marsala, que são as cores exclusivas das madrinhas. 🍷😅", highlight: true },
+              { title: "Convidado não convida", text: "Sabemos que é natural querer compartilhar esse momento, mas pedimos que respeitem nossa lista de convidados. Cada nome foi pensado com muito carinho!" },
+              { title: "Confirme sua presença", text: "Sua presença é muito importante para nós! Por isso, pedimos que nos avise com antecedência se poderá comparecer para nos ajudar a organizar tudo da melhor forma." },
             ].map((item) => (
               <div key={item.title} className={`${item.highlight ? "bg-[#FFF5F5] border-[#FADBD8]" : "bg-[#fdfbfb] border-[#F0E8E9]"} p-10 rounded-2xl border shadow-sm transform transition-transform hover:-translate-y-1 flex flex-col items-center text-center`}>
                 <Quote size={32} className={`${item.highlight ? "text-[#8A3343]" : "text-[#CBA1A6]"} mb-6`} />
@@ -387,11 +444,11 @@ export default function App() {
             <Bed size={32} strokeWidth={1.5} />
           </div>
           <p className="text-[#8A3343] uppercase tracking-[0.2em] text-sm mb-3 font-medium">Para quem vem de fora</p>
-          <h2 className="text-4xl md:text-5xl font-serif text-[#301B1E] mb-6 italic">Onde Ficar</h2>
-          <p className="text-[#4A4243] leading-relaxed text-lg mb-12 max-w-2xl mx-auto">Se vêm de outra cidade para celebrar connosco, separamos excelentes opções de hotéis em Três Lagoas.</p>
+          <h2 className="text-4xl md:text-5xl font-serif text-[#301B1E] mb-6 italic">Onde ficar</h2>
+          <p className="text-[#4A4243] leading-relaxed text-lg mb-12 max-w-2xl mx-auto">Se vocês vêm de outra cidade para celebrar conosco, separamos excelentes opções de hotéis em Três Lagoas.</p>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 text-left">
             {[
-              { nome: "Taj Hotel", desc: "Uma das opções mais sofisticadas da cidade, com excelente infraestrutura e pequeno-almoço maravilhoso.", mapa: "https://www.google.com/maps/search/Taj+Hotel+Tres+Lagoas", site: "https://www.google.com/search?q=Taj+Hotel+Tres+Lagoas+site" },
+              { nome: "Taj Hotel", desc: "Uma das opções mais sofisticadas da cidade, com excelente infraestrutura e café da manhã maravilhoso.", mapa: "https://www.google.com/maps/search/Taj+Hotel+Tres+Lagoas", site: "https://www.google.com/search?q=Taj+Hotel+Tres+Lagoas+site" },
               { nome: "Druds Express", desc: "Opção muito prática, moderna e com excelente custo-benefício. Ótima localização para quem procura conveniência.", mapa: "https://www.google.com/maps/search/Druds+Express+Hotel+Tres+Lagoas", site: "https://www.drudshotel.com.br/" },
               { nome: "Vila Romana Park", desc: "Perfeito para quem procura ambiente tranquilo, com bastante área verde e piscina para relaxar após a viagem.", mapa: "https://www.google.com/maps/search/Vila+Romana+Park+Hotel+Tres+Lagoas", site: "https://www.vilaromanaparkhotel.com.br/" },
               { nome: "Hotel OT", desc: "Um clássico da cidade! Fica em frente à Lagoa Maior, com vista privilegiada e excelente área de lazer.", mapa: "https://www.google.com/maps/search/Hotel+OT+Tres+Lagoas", site: "https://www.hotelot.com.br/" },
@@ -418,11 +475,11 @@ export default function App() {
             <ImagePlus size={32} strokeWidth={1.5} />
           </div>
           <p className="text-[#8A3343] uppercase tracking-[0.2em] text-sm mb-3 font-medium">Capturem cada momento</p>
-          <h2 className="text-4xl md:text-5xl font-serif text-[#301B1E] mb-6 italic">O Nosso Álbum Partilhado</h2>
-          <p className="text-[#4A4243] leading-relaxed text-lg mb-10 max-w-2xl mx-auto">Queremos ver o nosso grande dia através dos vossos olhos! Criámos um álbum digital onde todos podem partilhar as fotografias e os vídeos.</p>
+          <h2 className="text-4xl md:text-5xl font-serif text-[#301B1E] mb-6 italic">Nosso álbum compartilhado</h2>
+          <p className="text-[#4A4243] leading-relaxed text-lg mb-10 max-w-2xl mx-auto">Queremos ver o nosso grande dia pelos olhos de vocês! Criamos um álbum digital onde todos podem compartilhar fotos e vídeos.</p>
           <div className="bg-[#fdfbfb] p-8 md:p-10 rounded-[2rem] shadow-sm border border-[#F0E8E9] max-w-2xl mx-auto">
-            <h3 className="text-2xl font-serif text-[#8A3343] mb-4">Como partilhar?</h3>
-            <p className="text-[#4A4243] mb-8 text-lg">Basta clicar no botão abaixo para aceder à nossa pasta partilhada.</p>
+            <h3 className="text-2xl font-serif text-[#8A3343] mb-4">Como compartilhar?</h3>
+            <p className="text-[#4A4243] mb-8 text-lg">Basta clicar no botão abaixo para acessar a nossa pasta compartilhada.</p>
             <a href="https://photos.app.goo.gl/kNKMBfftRUVmTab38" target="_blank" rel="noopener noreferrer" className="inline-block bg-[#CBA1A6] text-[#301B1E] px-10 py-4 rounded-full hover:bg-[#b88c91] transition-colors uppercase tracking-[0.1em] text-sm font-semibold shadow-md">
               Adicionar Fotos ao Álbum
             </a>
@@ -437,13 +494,13 @@ export default function App() {
             <Music size={32} strokeWidth={1.5} />
           </div>
           <p className="text-[#8A3343] uppercase tracking-[0.2em] text-sm mb-3 font-medium">No ritmo da festa</p>
-          <h2 className="text-4xl md:text-5xl font-serif text-[#301B1E] mb-6 italic">A Nossa Trilha Sonora</h2>
+          <h2 className="text-4xl md:text-5xl font-serif text-[#301B1E] mb-6 italic">Nossa trilha sonora</h2>
           <p className="text-[#4A4243] leading-relaxed text-lg mb-10 max-w-2xl mx-auto">A festa é nossa, mas a música também é de vocês! Adicione aquelas músicas que não podem faltar para animar a pista de dança.</p>
           <div className="rounded-2xl overflow-hidden shadow-lg border border-[#F0E8E9] max-w-2xl mx-auto mb-8 bg-[#f5f3f3]">
             <iframe style={{ borderRadius: "16px" }} src="https://open.spotify.com/embed/playlist/6EE7EDNFBIQ83oVaNnm77R?utm_source=generator&theme=0" width="100%" height="352" frameBorder="0" allowFullScreen allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" title="Spotify Playlist" />
           </div>
           <a href="https://open.spotify.com/playlist/6EE7EDNFBIQ83oVaNnm77R?si=ebkAZGbERIaSp5CTd_yJjA&pt=e9f1b6c3ff5d341c8b7e8d94da06d6d1&pi=gTijJ5qSQYWn6" target="_blank" rel="noopener noreferrer" className="inline-block bg-[#8A3343] text-white px-10 py-4 rounded-full hover:bg-[#6B2533] transition-colors uppercase tracking-[0.1em] text-sm font-semibold shadow-md">
-            Adicionar Músicas no Spotify
+            Adicionar músicas no Spotify
           </a>
         </div>
       </section>
@@ -454,9 +511,9 @@ export default function App() {
           <div className="w-20 h-20 bg-[#fdfbfb] rounded-full flex items-center justify-center text-[#8A3343] mx-auto mb-8 shadow-sm border border-[#F0E8E9]">
             <MessageSquare size={32} strokeWidth={1.5} />
           </div>
-          <p className="text-[#8A3343] uppercase tracking-[0.2em] text-sm mb-3 font-medium">Deixem o vosso carinho</p>
+          <p className="text-[#8A3343] uppercase tracking-[0.2em] text-sm mb-3 font-medium">Deixem o carinho de vocês</p>
           <h2 className="text-4xl md:text-5xl font-serif text-[#301B1E] mb-6 italic">Mural de Recados</h2>
-          <p className="text-[#4A4243] leading-relaxed text-lg mb-12 max-w-2xl mx-auto">A vossa presença e as vossas palavras são muito importantes para nós. Deixem uma mensagem!</p>
+          <p className="text-[#4A4243] leading-relaxed text-lg mb-12 max-w-2xl mx-auto">A presença e as palavras de vocês são muito importantes para nós. Deixem uma mensagem!</p>
           <div className="grid md:grid-cols-3 gap-6 mb-16 text-left">
             {recados.slice(0, 6).map((r) => (
               <div key={r.id} className="bg-[#fdfbfb] p-8 rounded-2xl border border-[#F0E8E9] shadow-sm relative transform transition-transform hover:-translate-y-1">
@@ -470,15 +527,15 @@ export default function App() {
             <h3 className="text-2xl font-serif text-[#8A3343] mb-8 text-center">Escreva uma mensagem</h3>
             <form onSubmit={handleRecadoSubmit} className="space-y-6 text-left">
               <div>
-                <label className="block text-sm font-semibold text-[#4A4243] uppercase tracking-wider mb-2">O Seu Nome</label>
+                <label className="block text-sm font-semibold text-[#4A4243] uppercase tracking-wider mb-2">Seu nome</label>
                 <input type="text" required value={novoNome} onChange={(e) => setNovoNome(e.target.value)} className="w-full px-5 py-4 bg-white border border-[#F0E8E9] rounded-xl focus:ring-2 focus:ring-[#8A3343] focus:border-[#8A3343] outline-none transition-all shadow-sm" placeholder="Ex: Tio João e Tia Maria" />
               </div>
               <div>
-                <label className="block text-sm font-semibold text-[#4A4243] uppercase tracking-wider mb-2">Mensagem aos Noivos</label>
-                <textarea required rows="4" value={novoMsg} onChange={(e) => setNovoMsg(e.target.value)} className="w-full px-5 py-4 bg-white border border-[#F0E8E9] rounded-xl focus:ring-2 focus:ring-[#8A3343] focus:border-[#8A3343] outline-none resize-none transition-all shadow-sm" placeholder="Deixem os vossos votos e carinho aqui..." />
+                <label className="block text-sm font-semibold text-[#4A4243] uppercase tracking-wider mb-2">Mensagem aos noivos</label>
+                <textarea required rows="4" value={novoMsg} onChange={(e) => setNovoMsg(e.target.value)} className="w-full px-5 py-4 bg-white border border-[#F0E8E9] rounded-xl focus:ring-2 focus:ring-[#8A3343] focus:border-[#8A3343] outline-none resize-none transition-all shadow-sm" placeholder="Deixem seus votos e carinho aqui..." />
               </div>
               <button type="submit" disabled={sendingRecado} className="w-full bg-[#CBA1A6] text-[#301B1E] py-5 rounded-xl hover:bg-[#b88c91] transition-all transform hover:-translate-y-0.5 uppercase tracking-widest font-semibold disabled:opacity-70 disabled:transform-none shadow-md mt-4">
-                {sendingRecado ? "A enviar..." : "Publicar Mensagem"}
+                {sendingRecado ? "Enviando..." : "Publicar mensagem"}
               </button>
             </form>
           </div>
@@ -492,9 +549,9 @@ export default function App() {
             <Gift size={32} strokeWidth={1.5} />
           </div>
           <p className="text-[#8A3343] uppercase tracking-[0.2em] text-sm mb-3 font-medium">Mimo aos noivos</p>
-          <h2 className="text-4xl md:text-5xl font-serif text-[#301B1E] mb-4 italic">Lista de Presentes</h2>
+          <h2 className="text-4xl md:text-5xl font-serif text-[#301B1E] mb-4 italic">Lista de presentes</h2>
           <p className="text-[#4A4243] leading-relaxed text-lg mb-12 max-w-2xl mx-auto">
-            A presença de cada um de vocês é o nosso maior presente! Se desejarem abençoar o nosso novo lar, preparámos uma lista especial. Clique em <strong>Quero dar este presente</strong> para reservar um item — assim evitamos presentes repetidos! 🎁
+            A presença de cada um de vocês é o nosso maior presente! Se desejarem abençoar o nosso novo lar, preparamos uma lista especial. Clique em <strong>Quero dar este presente</strong> para reservar um item — assim evitamos presentes repetidos! 🎁
           </p>
 
           {loadingPresentes ? (
@@ -576,13 +633,13 @@ export default function App() {
         <div className="max-w-2xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-4xl md:text-5xl font-serif text-[#301B1E] mb-4 italic">RSVP</h2>
-            <p className="text-[#8A3343] text-lg">Por favor, confirme a sua presença até 09 de Dezembro de 2026.</p>
+            <p className="text-[#8A3343] text-lg">Por favor, confirme sua presença até 09 de dezembro de 2026.</p>
           </div>
           {rsvpStatus === "success" ? (
             <div className="bg-white p-12 rounded-[2rem] border border-[#F0E8E9] shadow-lg text-center">
               <CheckCircle2 size={64} className="text-[#8A3343] mx-auto mb-6" strokeWidth={1.5} />
-              <h3 className="text-3xl font-serif text-[#301B1E] mb-4 italic">Muito Obrigado!</h3>
-              <p className="text-[#4A4243] text-lg">A sua confirmação foi recebida com sucesso. Estamos ansiosos para celebrar este dia consigo!</p>
+              <h3 className="text-3xl font-serif text-[#301B1E] mb-4 italic">Confirmação recebida!</h3>
+              <p className="text-[#4A4243] text-lg">Sua confirmação foi recebida com sucesso. Estamos ansiosos para celebrar este dia com você!</p>
             </div>
           ) : (
             <form onSubmit={handleRsvpSubmit} className="space-y-6 bg-white p-8 md:p-12 rounded-[2rem] shadow-xl text-[#301B1E] border border-[#F0E8E9]">
@@ -606,15 +663,15 @@ export default function App() {
               <div className="space-y-2">
                 <label className="text-sm font-semibold text-[#4A4243] uppercase tracking-wider">Quantos adultos (incluindo você)?</label>
                 <select value={rsvpAdultos} onChange={(e) => setRsvpAdultos(e.target.value)} className="w-full px-5 py-4 bg-[#fdfbfb] border border-[#F0E8E9] rounded-xl focus:ring-2 focus:ring-[#8A3343] focus:border-[#8A3343] outline-none">
-                  {["1","2","3","4","5"].map((n) => <option key={n} value={n}>{n === "5" ? "5 ou mais" : `${n} Adulto${n !== "1" ? "s" : ""}`}</option>)}
+                  {["1","2","3","4","5"].map((n) => <option key={n} value={n}>{n === "5" ? "5 ou mais" : `${n} adulto${n !== "1" ? "s" : ""}`}</option>)}
                 </select>
               </div>
               <div className="space-y-2">
-                <label className="text-sm font-semibold text-[#4A4243] uppercase tracking-wider">Restrições Alimentares / Mensagem</label>
+                <label className="text-sm font-semibold text-[#4A4243] uppercase tracking-wider">Restrições alimentares / mensagem</label>
                 <textarea rows="4" value={rsvpObs} onChange={(e) => setRsvpObs(e.target.value)} className="w-full px-5 py-4 bg-[#fdfbfb] border border-[#F0E8E9] rounded-xl focus:ring-2 focus:ring-[#8A3343] focus:border-[#8A3343] outline-none resize-none" placeholder="Deixe uma mensagem carinhosa ou informe-nos sobre alergias..." />
               </div>
               <button type="submit" disabled={rsvpStatus === "submitting"} className="w-full bg-[#8A3343] text-white py-5 rounded-xl hover:bg-[#6B2533] transition-all transform hover:-translate-y-0.5 uppercase tracking-widest font-semibold disabled:opacity-70 shadow-md mt-4">
-                {rsvpStatus === "submitting" ? <span className="animate-pulse">A enviar...</span> : "Confirmar Presença"}
+                {rsvpStatus === "submitting" ? <span className="animate-pulse">Enviando...</span> : "Confirmar presença"}
               </button>
             </form>
           )}
