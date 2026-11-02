@@ -35,7 +35,7 @@ async function sbUpdate(table, id, data) {
 }
 
 // ── Countdown ────────────────────────────────────────────────────
-const weddingDate = new Date("2027-01-09T17:00:00");
+const weddingDate = new Date("2027-01-09T16:00:00");
 
 function calcTimeLeft() {
   const diff = +weddingDate - +new Date();
@@ -393,7 +393,7 @@ export default function App() {
               <div className="flex flex-col items-center pt-4 md:pt-0 md:pr-4">
                 <Calendar size={28} className="text-[#CBA1A6] mb-4" strokeWidth={1.5} />
                 <h4 className="font-serif text-2xl text-[#301B1E] mb-2">A cerimônia</h4>
-                <div className="flex items-center text-[#4A4243] text-lg bg-[#fdfbfb] px-4 py-2 rounded-full shadow-sm border border-[#F0E8E9] mb-2"><Clock size={18} className="mr-2 text-[#CBA1A6]" />17:00</div>
+                <div className="flex items-center text-[#4A4243] text-lg bg-[#fdfbfb] px-4 py-2 rounded-full shadow-sm border border-[#F0E8E9] mb-2"><Clock size={18} className="mr-2 text-[#CBA1A6]" />16:00</div>
                 <p className="text-[#8A3343] text-sm italic">Chegada a partir das 15:00</p>
               </div>
               <div className="flex flex-col items-center pt-10 md:pt-0 md:pl-4">
@@ -499,7 +499,7 @@ export default function App() {
           <div className="rounded-2xl overflow-hidden shadow-lg border border-[#F0E8E9] max-w-2xl mx-auto mb-8 bg-[#f5f3f3]">
             <iframe style={{ borderRadius: "16px" }} src="https://open.spotify.com/embed/playlist/6EE7EDNFBIQ83oVaNnm77R?utm_source=generator&theme=0" width="100%" height="352" frameBorder="0" allowFullScreen allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy" title="Spotify Playlist" />
           </div>
-          <a href="https://open.spotify.com/playlist/6EE7EDNFBIQ83oVaNnm77R?si=ebkAZGbERIaSp5CTd_yJjA&pt=e9f1b6c3ff5d341c8b7e8d94da06d6d1&pi=gTijJ5qSQYWn6" target="_blank" rel="noopener noreferrer" className="inline-block bg-[#8A3343] text-white px-10 py-4 rounded-full hover:bg-[#6B2533] transition-colors uppercase tracking-[0.1em] text-sm font-semibold shadow-md">
+          <a href="https://open.spotify.com/playlist/6EE7EDNFBIQ83oVaNnm77R?si=caf680df4cdd4f1c&pt=94eb368d8afd6ac0c76ef49975612547" target="_blank" rel="noopener noreferrer" className="inline-block bg-[#8A3343] text-white px-10 py-4 rounded-full hover:bg-[#6B2533] transition-colors uppercase tracking-[0.1em] text-sm font-semibold shadow-md">
             Adicionar músicas no Spotify
           </a>
         </div>
