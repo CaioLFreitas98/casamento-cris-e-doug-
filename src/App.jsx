@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import ModalReserva from "./ModalReserva";
-import { Heart, Calendar, MapPin, Clock, Gift, CheckCircle2, ChevronDown, Camera, Music, ImagePlus, ChevronLeft, ChevronRight, Sparkles, MessageSquare, Bed, Quote, Globe, Package, User, Lock, Unlock } from "lucide-react";
+import { Heart, Calendar, MapPin, Clock, Gift, CheckCircle2, ChevronDown, Camera, Music, ImagePlus, ChevronLeft, ChevronRight, Sparkles, MessageSquare, Bed, Quote, Globe, Package, Lock, Unlock } from "lucide-react";
 
 // ── Supabase config ──────────────────────────────────────────────
 const SUPABASE_URL = "https://eycmdlmlslljzhzqbfio.supabase.co";
@@ -126,7 +126,8 @@ export default function App() {
   // Load presentes
   const loadPresentes = useCallback(async () => {
     setLoadingPresentes(true);
-    const data = await sbGet("presentes", "&order=id.asc");
+    // Não busca reservado_por: o nome de quem reservou fica só para os noivos
+    const data = await sbGet("presentes", "&select=id,nome,descricao,imagem_url,preco_estimado,reservado,created_at&order=id.asc");
     if (Array.isArray(data)) setPresentes(data);
     setLoadingPresentes(false);
   }, []);
@@ -170,12 +171,12 @@ export default function App() {
   // Reservar presente
   const handleReservar = async (id, nome) => {
     // Só atualiza se o presente ainda estiver livre (evita reserva dupla)
-    const res = await sbUpdate("presentes", id, { reservado: true, reservado_por: nome }, "&reservado=not.is.true");
+    const res = await sbUpdate("presentes", id, { reservado: true, reservado_por: nome }, "&reservado=not.is.true&select=id");
     if (!Array.isArray(res) || res.length === 0) {
       await loadPresentes();
       throw new Error("Este presente acabou de ser reservado por outra pessoa. Escolha outro, por favor.");
     }
-    setPresentes((prev) => prev.map((p) => (p.id === id ? { ...p, reservado: true, reservado_por: nome } : p)));
+    setPresentes((prev) => prev.map((p) => (p.id === id ? { ...p, reservado: true } : p)));
   };
 
   const navLinks = [
@@ -562,8 +563,8 @@ export default function App() {
 
                       {p.reservado ? (
                         <div className="flex items-center gap-2 text-[#4A4243] text-sm bg-[#fdfbfb] px-4 py-3 rounded-xl border border-[#F0E8E9]">
-                          <User size={14} className="text-[#CBA1A6]" />
-                          <span>Reservado por <strong>{p.reservado_por}</strong></span>
+                          <CheckCircle2 size={14} className="text-[#CBA1A6]" />
+                          <span>Presente já reservado</span>
                         </div>
                       ) : (
                         <button
