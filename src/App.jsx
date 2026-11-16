@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+import ModalReserva from "./ModalReserva";
 import { Heart, Calendar, MapPin, Clock, Gift, CheckCircle2, ChevronDown, Camera, Music, ImagePlus, ChevronLeft, ChevronRight, Sparkles, MessageSquare, Bed, Quote, Globe, Package, User, Lock, Unlock } from "lucide-react";
 
 // ── Supabase config ──────────────────────────────────────────────
@@ -25,12 +26,13 @@ async function sbInsert(table, data) {
   return res.json();
 }
 
-async function sbUpdate(table, id, data) {
-  const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}?id=eq.${id}`, {
+async function sbUpdate(table, id, data, filters = "") {
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/${table}?id=eq.${id}${filters}`, {
     method: "PATCH",
     headers: { ...headers, Prefer: "return=representation" },
     body: JSON.stringify(data),
   });
+  if (!res.ok) throw new Error("Não foi possível reservar agora. Tente novamente.");
   return res.json();
 }
 
@@ -66,58 +68,6 @@ const topMessages = [
     text: "Fique à vontade para registrar os momentos especiais, mas pedimos que evitem interferir no trabalho dos fotógrafos profissionais. Assim, todos poderão aproveitar as memórias dessa celebração.",
   },
 ];
-
-// ── Modal Reserva ────────────────────────────────────────────────
-function ModalReserva({ presente, onClose, onConfirm }) {
-  const [nome, setNome] = useState("");
-  const [loading, setLoading] = useState(false);
-
-  const handleSubmit = async () => {
-    if (!nome.trim()) return;
-    setLoading(true);
-    await onConfirm(presente.id, nome.trim());
-    setLoading(false);
-    onClose();
-  };
-
-  return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 px-4" onClick={onClose}>
-      <div className="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl" onClick={(e) => e.stopPropagation()}>
-        <div className="text-center mb-6">
-          <div className="w-16 h-16 bg-[#fdfbfb] rounded-full flex items-center justify-center text-[#8A3343] mx-auto mb-4 border border-[#F0E8E9]">
-            <Gift size={28} strokeWidth={1.5} />
-          </div>
-          <h3 className="text-2xl font-serif text-[#301B1E] italic mb-1">Reservar presente</h3>
-          <p className="text-[#4A4243]">Você está reservando: <strong>{presente.nome}</strong></p>
-        </div>
-        <div className="mb-6">
-          <label className="block text-sm font-semibold text-[#4A4243] uppercase tracking-wider mb-2">Seu nome</label>
-          <input
-            type="text"
-            value={nome}
-            onChange={(e) => setNome(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
-            className="w-full px-5 py-4 bg-[#fdfbfb] border border-[#F0E8E9] rounded-xl focus:ring-2 focus:ring-[#8A3343] focus:border-[#8A3343] outline-none"
-            placeholder="Ex: Tia Maria"
-            autoFocus
-          />
-        </div>
-        <div className="flex gap-3">
-          <button onClick={onClose} className="flex-1 py-4 border border-[#F0E8E9] rounded-xl text-[#4A4243] hover:bg-[#fdfbfb] transition-colors font-medium">
-            Cancelar
-          </button>
-          <button
-            onClick={handleSubmit}
-            disabled={loading || !nome.trim()}
-            className="flex-1 py-4 bg-[#8A3343] text-white rounded-xl hover:bg-[#6B2533] transition-colors font-semibold disabled:opacity-60"
-          >
-            {loading ? "Reservando..." : "Confirmar"}
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-}
 
 // ── Componente Principal ─────────────────────────────────────────
 export default function App() {
@@ -219,7 +169,12 @@ export default function App() {
 
   // Reservar presente
   const handleReservar = async (id, nome) => {
-    await sbUpdate("presentes", id, { reservado: true, reservado_por: nome });
+    // Só atualiza se o presente ainda estiver livre (evita reserva dupla)
+    const res = await sbUpdate("presentes", id, { reservado: true, reservado_por: nome }, "&reservado=not.is.true");
+    if (!Array.isArray(res) || res.length === 0) {
+      await loadPresentes();
+      throw new Error("Este presente acabou de ser reservado por outra pessoa. Escolha outro, por favor.");
+    }
     setPresentes((prev) => prev.map((p) => (p.id === id ? { ...p, reservado: true, reservado_por: nome } : p)));
   };
 
